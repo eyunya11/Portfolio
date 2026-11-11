@@ -1,0 +1,49 @@
+---
+import { profile, changelog } from '../data/profile';
+---
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <details class="changelog">
+      <summary class="en">Changelog / 更新履歴</summary>
+      <ul>
+        {
+          changelog.map((c) => (
+            <li>
+              <time>{c.date}</time> {c.title}
+            </li>
+          ))
+        }
+      </ul>
+    </details>
+    <p class="copy">© 2026 {profile.nameEn}. Built with Astro.</p>
+  </div>
+</footer>
+
+<style>
+  /* 黒面 */
+  .footer {
+    background: var(--black);
+    color: var(--white);
+    padding-block: 32px 48px;
+    font-size: 11px;
+  }
+  .footer :focus-visible {
+    outline-color: var(--white);
+  }
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .changelog summary {
+    cursor: pointer;
+  }
+  .changelog ul {
+    list-style: none;
+    margin-top: 8px;
+    font-size: 13px;
+  }
+</style>

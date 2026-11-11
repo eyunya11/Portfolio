@@ -1,16 +1,369 @@
 ---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import WorkTile from '../components/WorkTile.astro';
+import Footer from '../components/Footer.astro';
+import SkillList from '../components/SkillList.astro';
+import {
+  site,
+  profile,
+  links,
+  works,
+  levels,
+  timeline,
+  certifications,
+} from '../data/profile';
+
+const levelKeys = Object.keys(levels).map(Number) as (keyof typeof levels)[];
+
+const certs = certifications.length > 0 ? certifications : [{ date: '—', title: '準備中' }];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Base
+  title={`${profile.nameEn} | ${site.title}`}
+  description={`${profile.school} ${profile.course} ${profile.grade} のポートフォリオ`}
+>
+  <Header />
+
+  <main id="top">
+    <!-- ===== Hero (黒面) ===== -->
+    <section class="hero">
+      <div class="container">
+        <p class="hero-kicker en">Portfolio — v{site.version}</p>
+        <h1 class="hero-name">{profile.name}</h1>
+        <p class="hero-en en">{profile.nameEn}</p>
+        <p class="hero-tagline">{profile.tagline}</p>
+        <dl class="hero-meta">
+          <div>
+            <dt class="en">School</dt>
+            <dd>{profile.school} {profile.course}</dd>
+          </div>
+          <div>
+            <dt class="en">Grade</dt>
+            <dd>{profile.grade}</dd>
+          </div>
+          <div>
+            <dt class="en">Age</dt>
+            <dd>{profile.age}</dd>
+          </div>
+        </dl>
+        <p class="hero-updated en">Updated {site.updated}</p>
+      </div>
+    </section>
+
+    <!-- ===== About ===== -->
+    <section class="section" id="about">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-num">01</span>
+          <h2 class="section-title">About</h2>
+          <p class="section-sub">プロフィール</p>
+        </div>
+        <div class="about">
+          <div class="about-text">
+            {profile.about.map((p) => <p>{p}</p>)}
+          </div>
+          <div class="about-side">
+            <h3 class="side-title en">Interests / 興味・得意なこと</h3>
+            <ul class="tags">
+              {profile.interests.map((t) => <li class="tag">{t}</li>)}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Works ===== -->
+    <section class="section section-works" id="works">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-num">02</span>
+          <h2 class="section-title">Works</h2>
+          <p class="section-sub">制作物</p>
+          <p class="section-lead">カードを選ぶと、作品の詳細ページを表示します。</p>
+        </div>
+        <ul class="works-grid">
+          {works.map((w, i) => <li><WorkTile work={w} index={i} /></li>)}
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===== Skills ===== -->
+    <section class="section" id="skills">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-num">03</span>
+          <h2 class="section-title">Skills</h2>
+          <p class="section-sub">スキル・経験</p>
+          <p class="section-lead">
+            使用経験を3段階で示しています。アイコンを選ぶと、実際に何をしたかの説明を表示します。
+          </p>
+        </div>
+
+        <dl class="legend">
+          {
+            levelKeys.map((k) => (
+              <div class="legend-item">
+                <dt>
+                  <span class="lv">
+                    <span class="lv-dots" aria-hidden="true">
+                      {[1, 2, 3].map((d) => (
+                        <span class:list={['dot', { on: d <= k }]} />
+                      ))}
+                    </span>
+                    Lv.{k} {levels[k].name}
+                  </span>
+                </dt>
+                <dd>{levels[k].desc}</dd>
+              </div>
+            ))
+          }
+        </dl>
+
+        <SkillList />
+      </div>
+    </section>
+
+    <!-- ===== History ===== -->
+    <section class="section" id="history">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-num">04</span>
+          <h2 class="section-title">History</h2>
+          <p class="section-sub">経歴・活動・資格</p>
+        </div>
+        <div class="history">
+          <div>
+            <h3 class="side-title en">Career / 経歴・活動</h3>
+            <ol class="timeline">
+              {
+                timeline.map((e) => (
+                  <li>
+                    <time>{e.date}</time>
+                    <div>
+                      <p class="tl-title">{e.title}</p>
+                      {e.desc && <p class="tl-desc">{e.desc}</p>}
+                    </div>
+                  </li>
+                ))
+              }
+            </ol>
+          </div>
+          <div>
+            <h3 class="side-title en">Certification / 資格</h3>
+            <ol class="timeline">
+              {
+                certs.map((e) => (
+                  <li>
+                    <time>{e.date}</time>
+                    <div>
+                      <p class="tl-title">{e.title}</p>
+                    </div>
+                  </li>
+                ))
+              }
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Contact ===== -->
+    <section class="section" id="contact">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-num">05</span>
+          <h2 class="section-title">Contact</h2>
+          <p class="section-sub">リンク</p>
+        </div>
+        <ul class="contact">
+          {
+            links.map((l) => (
+              <li>
+                <a class="btn" href={l.url} target="_blank" rel="noopener noreferrer">
+                  {l.label}
+                  <span aria-hidden="true">↗</span>
+                  <span class="visually-hidden">(新しいタブで開く)</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Base>
+
+<style>
+  /* ---------- Hero: 黒面に白文字 (21:1) ---------- */
+  .hero {
+    background: var(--black);
+    color: var(--white);
+    padding-block: clamp(80px, 14vw, 176px) clamp(48px, 8vw, 96px);
+  }
+  .hero :focus-visible {
+    outline-color: var(--white);
+  }
+  .hero-kicker {
+    font-size: 12px;
+  }
+  .hero-name {
+    font-size: clamp(40px, 9vw, 96px);
+    line-height: 1.03;
+    margin-top: 20px;
+    width: fit-content;
+  }
+  .hero-en {
+    font-size: 16px;
+    line-height: 1.4;
+    margin-top: 16px;
+  }
+  .hero-tagline {
+    font-size: clamp(16px, 2.2vw, 20px);
+    margin-top: 32px;
+  }
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    margin: 48px 0 0;
+    border-top: 1px solid var(--white);
+  }
+  .hero-meta div {
+    padding: 14px 40px 0 0;
+  }
+  .hero-meta dt {
+    font-size: 11px;
+  }
+  .hero-meta dd {
+    margin: 2px 0 0;
+    font-weight: 700;
+  }
+  .hero-updated {
+    margin-top: 48px;
+    font-size: 11px;
+  }
+
+  /* ---------- About ---------- */
+  .about {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 72px);
+  }
+  .about-text {
+    font-size: 16px;
+  }
+  .about-text p + p {
+    margin-top: 1em;
+  }
+  .side-title {
+    font-size: 11px;
+    margin-bottom: 14px;
+  }
+
+  /* ---------- Works ---------- */
+  .works-grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+    gap: 16px;
+  }
+
+  /* ---------- Skills ---------- */
+  .legend {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4px;
+    margin: 0 0 64px;
+  }
+  .legend-item {
+    padding: 16px 20px;
+    background: var(--black);
+    color: var(--white);
+  }
+  .legend-item .dot {
+    border-color: var(--white);
+  }
+  .legend-item .dot.on {
+    background: var(--white);
+  }
+  .legend-item dd {
+    margin: 8px 0 0;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .lv {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .lv-dots {
+    display: inline-flex;
+    gap: 3px;
+  }
+  .dot {
+    width: 9px;
+    height: 9px;
+    border: 1px solid var(--black);
+  }
+  .dot.on {
+    background: var(--black);
+  }
+  /* ---------- History ---------- */
+  .history {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 72px);
+  }
+  .timeline {
+    list-style: none;
+  }
+  .timeline li {
+    display: grid;
+    grid-template-columns: 8em minmax(0, 1fr);
+    gap: 16px;
+    padding: 14px 0;
+    border-top: 1px solid var(--black);
+  }
+  .timeline time {
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .tl-title {
+    font-weight: 700;
+  }
+  .tl-desc {
+    font-size: 13px;
+    color: var(--ink);
+  }
+
+  /* ---------- Contact ---------- */
+  .contact {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+
+  @media (max-width: 860px) {
+    .about,
+    .history {
+      grid-template-columns: 1fr;
+    }
+    .legend {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 420px) {
+    .timeline li {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+  }
+</style>

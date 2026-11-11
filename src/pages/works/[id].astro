@@ -1,0 +1,109 @@
+---
+// 作品の詳細ページ。profile.ts の works 1件ごとに /works/<id>/ を生成する。
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import WorkCard from '../../components/WorkCard.astro';
+import Lightbox from '../../components/Lightbox.astro';
+import { profile, site, works, type Work } from '../../data/profile';
+import { asset } from '../../lib/url';
+
+export function getStaticPaths() {
+  return works.map((work, index) => ({ params: { id: work.id }, props: { work, index } }));
+}
+
+interface Props {
+  work: Work;
+  index: number;
+}
+const { work, index } = Astro.props;
+const prev = works[index - 1];
+const next = works[index + 1];
+const list = `${asset('')}#works`;
+---
+
+<Base title={`${work.title} | ${profile.nameEn} ${site.title}`} description={work.short}>
+  <Header />
+
+  <main class="container">
+    <nav class="crumb en" aria-label="パンくずリスト">
+      <a href={list}>Works</a>
+      <span aria-hidden="true">/</span>
+      <span>{work.title}</span>
+    </nav>
+
+    <WorkCard work={work} index={index} />
+
+    <nav class="pager" aria-label="ほかの作品">
+      {
+        prev ? (
+          <a class="pager-link" href={asset(`works/${prev.id}/`)}>
+            <span class="en">← Prev</span>
+            <span class="pager-title">{prev.title}</span>
+          </a>
+        ) : (
+          <span />
+        )
+      }
+      <a class="btn" href={list}>作品一覧へ戻る</a>
+      {
+        next ? (
+          <a class="pager-link pager-next" href={asset(`works/${next.id}/`)}>
+            <span class="en">Next →</span>
+            <span class="pager-title">{next.title}</span>
+          </a>
+        ) : (
+          <span />
+        )
+      }
+    </nav>
+  </main>
+
+  <Footer />
+  <Lightbox />
+</Base>
+
+<style>
+  .crumb {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding-top: clamp(32px, 6vw, 64px);
+    font-size: 11px;
+  }
+  .pager {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 16px;
+    padding-block: 32px clamp(64px, 10vw, 112px);
+    border-top: 1px solid var(--black);
+  }
+  .pager-link {
+    display: flex;
+    flex-direction: column;
+    font-size: 11px;
+    text-decoration: none;
+  }
+  .pager-link:hover .pager-title {
+    text-decoration: underline;
+  }
+  .pager-next {
+    text-align: right;
+  }
+  .pager-title {
+    font-size: 15px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+  }
+  @media (max-width: 640px) {
+    .pager {
+      grid-template-columns: 1fr 1fr;
+    }
+    .pager .btn {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      justify-content: center;
+    }
+  }
+</style>

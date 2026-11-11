@@ -1,0 +1,85 @@
+---
+// 作品一覧のカード。クリックすると作品の詳細ページへ移動する。
+import type { Work } from '../data/profile';
+import { asset } from '../lib/url';
+
+interface Props {
+  work: Work;
+  index: number;
+}
+const { work, index } = Astro.props;
+const num = String(index + 1).padStart(2, '0');
+---
+
+<a class="tile" href={asset(`works/${work.id}/`)}>
+  <p class="tile-label en">
+    <span class="num">{num}</span>
+    {work.label}
+  </p>
+  <h3 class="tile-title">{work.title}</h3>
+  <p class="tile-short">{work.short}</p>
+  <ul class="tile-tech">
+    {work.tech.slice(0, 4).map((t) => <li>{t}</li>)}
+  </ul>
+  <span class="tile-more en">View <span aria-hidden="true">→</span></span>
+</a>
+
+<style>
+  .tile {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 28px 28px 24px;
+    border: 1px solid var(--black);
+    color: var(--black);
+    background: var(--white);
+    text-decoration: none;
+    transition:
+      background 0.15s,
+      color 0.15s;
+  }
+  .tile:hover {
+    background: var(--black);
+    color: var(--white);
+  }
+  .tile:hover .num {
+    color: var(--white);
+  }
+  .tile-label {
+    font-size: 11px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .num {
+    color: var(--accent);
+  }
+  .tile-title {
+    font-size: clamp(20px, 2vw, 24px);
+    line-height: 1.2;
+    margin-top: 16px;
+    overflow-wrap: break-word;
+  }
+  .tile-short {
+    font-size: 14px;
+    line-height: 1.7;
+    margin-top: 12px;
+  }
+  .tile-tech {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    margin-top: 16px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .tile-more {
+    margin-top: auto;
+    padding-top: 24px;
+    font-size: 12px;
+  }
+  .tile:hover .tile-more {
+    text-decoration: underline;
+  }
+</style>

@@ -1,0 +1,188 @@
+---
+import type { Work } from '../data/profile';
+import { asset } from '../lib/url';
+
+interface Props {
+  work: Work;
+  index: number;
+}
+const { work, index } = Astro.props;
+const num = String(index + 1).padStart(2, '0');
+---
+
+<article class="work" id={work.id}>
+  <header class="work-head">
+    <p class="work-label en">
+      <span class="num">{num}</span>
+      {work.label}
+    </p>
+    <h1 class="work-title">{work.title}</h1>
+    <p class="work-period">{work.period}</p>
+  </header>
+
+  <div class:list={['work-body', { 'no-images': work.images.length === 0 }]}>
+    <div class="work-text">
+      <p class="work-summary">{work.summary}</p>
+
+      {
+        work.role && (
+          <div class="work-role">
+            <h2 class="sub en">Role / 役割・担当</h2>
+            <p>{work.role}</p>
+          </div>
+        )
+      }
+
+      <h2 class="sub en">Points / ポイント</h2>
+      <ul class="points">
+        {work.points.map((p) => <li>{p}</li>)}
+      </ul>
+
+      <h2 class="sub en">Tech / 使用技術</h2>
+      <ul class="tags">
+        {work.tech.map((t) => <li class="tag">{t}</li>)}
+      </ul>
+
+      <div class="work-links">
+        {
+          work.links.map((l) =>
+            l.url ? (
+              <a class="btn" href={l.url} target="_blank" rel="noopener noreferrer">
+                {l.label}
+                <span aria-hidden="true">↗</span>
+                <span class="visually-hidden">(新しいタブで開く)</span>
+              </a>
+            ) : (
+              <span class="btn btn-disabled" aria-disabled="true">
+                {l.label}: リンク未設定
+              </span>
+            ),
+          )
+        }
+      </div>
+    </div>
+
+    {work.images.length > 0 && (
+    <ul class="gallery" aria-label={`${work.title} の画像`}>
+      {
+        work.images.map((img, i) => (
+          <li>
+            <figure>
+              <button
+                type="button"
+                class="shot"
+                data-full={asset(img.src)}
+                data-caption={img.caption}
+                aria-label={`画像${i + 1}を拡大: ${img.caption}`}
+              >
+                <img src={asset(img.src)} alt={img.alt} loading="lazy" width="1600" height="900" />
+              </button>
+              <figcaption>{img.caption}</figcaption>
+            </figure>
+          </li>
+        ))
+      }
+    </ul>
+    )}
+  </div>
+</article>
+
+<style>
+  .work {
+    padding-block: clamp(40px, 6vw, 72px);
+  }
+  .work-label {
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .num {
+    color: var(--accent);
+  }
+  .work-title {
+    font-size: clamp(32px, 6vw, 56px);
+    line-height: 1.03;
+    overflow-wrap: anywhere;
+    margin-top: 10px;
+  }
+  .work-period {
+    font-size: 13px;
+    color: var(--ink);
+    margin-top: 6px;
+  }
+  .work-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+    gap: clamp(24px, 4vw, 56px);
+    margin-top: 32px;
+  }
+  /* 画像がない作品は、文章だけを読みやすい幅で表示する */
+  .work-body.no-images {
+    grid-template-columns: minmax(0, 52em);
+  }
+  .sub {
+    font-size: 11px;
+    margin: 28px 0 8px;
+  }
+  .work-role p {
+    padding: 12px 16px;
+    background: var(--black);
+    color: var(--white);
+  }
+  .points {
+    padding-left: 1.2em;
+  }
+  .points li + li {
+    margin-top: 4px;
+  }
+  .work-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 32px;
+  }
+  .gallery {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 4px;
+    align-content: start;
+  }
+  figure {
+    margin: 0 0 12px;
+  }
+  .shot {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: none;
+    background: #eeeeee;
+    cursor: zoom-in;
+  }
+  .shot img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    transition: opacity 0.2s;
+  }
+  .shot:hover img {
+    opacity: 0.8;
+  }
+  figcaption {
+    font-size: 12px;
+    line-height: 1.6;
+    margin-top: 6px;
+  }
+  @media (max-width: 860px) {
+    .work-body {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 420px) {
+    .gallery {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
