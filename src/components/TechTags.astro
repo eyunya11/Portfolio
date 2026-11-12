@@ -10,11 +10,13 @@ interface Props {
   size?: 'normal' | 'small';
 }
 const { items, size = 'normal' } = Astro.props;
+// 空の項目と重複は出さない
+const list = [...new Set(items.map((t) => t.trim()).filter((t) => t !== ''))];
 ---
 
 <ul class:list={['tech', size]}>
   {
-    items.map((t) => (
+    list.map((t) => (
       <li class="tech-item">
         {(techIcons[t] ?? []).map((ic) => (
           <img src={asset(`icons/${ic}.svg`)} alt="" width="20" height="20" />

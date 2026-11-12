@@ -11,7 +11,7 @@ export type Shot = { src: string; alt: string; caption: string };
 // ---------------------------------------------------------------------
 export const site = {
   title: 'Portfolio',
-  version: '1.0',
+  // フッターの「最終更新」に出す。更新したら書き換える
   updated: '2026-11-12',
 };
 
@@ -245,8 +245,3 @@ export const timeline: Event[] = [
   { date: '2026.08', title: 'Minecraft MOD「Create Train Next」の個人開発を開始' },
   { date: '2026.10', title: 'Minecraft MOD「CreateRealTimeSchedule」の個人開発を開始' },
 ];
-
-// ---------------------------------------------------------------------
-// 更新履歴
-// ---------------------------------------------------------------------
-export const changelog: Event[] = [{ date: '2026-11-12', title: 'v1.0 第1版を公開' }];

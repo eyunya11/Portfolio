@@ -1,11 +1,12 @@
 /* =====================================================================
-   配色 (詳しくは README.md の「配色の設計」)
-   - 背景は純黒ではない暗い灰色 #111111。長時間読んでも目が疲れにくい
-   - 文字は白 #ffffff、補足は明るい灰色 #c8c8c8
-   - アクセントは青。文字のリンクは背景とのコントラスト比 4.5:1 以上を
-     確保するため、明るめの #7a9af2 を使う (#3865e0 は 3.69:1 で足りない)
-   - 注意を引く表示 (リンク未設定) だけ赤 #ff5a5a
-   - 影は使わず、面の明るさの違いで奥行きを出す。角丸は 2〜3px まで
+   色の役割 (1つの色に1つの意味だけを持たせる。詳しくは README.md)
+   - 基調  : 背景 #111111 / 面 #1a1a1a・#232323 / 文字 #ffffff / 補足 #c8c8c8
+             名前などのブランド要素も白い文字で表し、ブランド専用の色は持たない
+   - 操作色: 青。押せるもの (リンク・ボタン・キーボードの選択枠) にだけ使う
+             文字のリンクは背景とのコントラスト比 4.5:1 以上の #7a9af2
+   - 注意色: 赤 #ff5a5a。データが足りないこと (リンク未設定) にだけ使う
+   - 状態  : 開発中・画像なし などは色を付けず、補足の灰色の文字で示す
+   - 影は使わず、面の明るさの違いで区切る。角丸は 2px まで
    ===================================================================== */
 :root {
   --bg: #111111;
@@ -13,14 +14,14 @@
   --surface-2: #232323;
   --fg: #ffffff;
   --muted: #c8c8c8;
-  --mist: rgba(255, 255, 255, 0.5);
   --line: #646464;
   --line-soft: #2e2e2e;
 
+  /* 操作色 */
   --link: #7a9af2;
-  --blue: #3865e0;
   --btn: #2d75c7;
   --btn-hover: #3865e0;
+  /* 注意色 */
   --danger: #ff5a5a;
 
   --font-sans: 'Inter', 'Noto Sans JP', Arial, 'Helvetica Neue', Meiryo, 'Hiragino Kaku Gothic ProN', sans-serif;
@@ -104,12 +105,6 @@ ol {
   padding-inline: var(--gutter);
 }
 
-/* 英字の小さなラベル (広めの字間) */
-.en {
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-feature-settings: 'palt';
-}
 
 .visually-hidden {
   position: absolute;
@@ -129,35 +124,19 @@ ol {
 .section-head {
   display: flex;
   align-items: baseline;
-  gap: 8px 16px;
-  flex-wrap: wrap;
-  margin-bottom: clamp(32px, 5vw, 48px);
-}
-
-.section-num {
-  font-size: 12px;
-  letter-spacing: 0.1em;
-  color: var(--mist);
-}
-
-.section-sub {
-  font-size: 12px;
-  color: var(--muted);
+  gap: 16px;
+  margin-bottom: clamp(24px, 4vw, 40px);
 }
 
 .section-title {
-  width: 100%;
-  order: 3;
-  font-size: 24px;
+  font-size: clamp(22px, 2.6vw, 28px);
   font-weight: 700;
-  line-height: 1.5;
+  line-height: 1.4;
   font-feature-settings: 'palt';
-  letter-spacing: 0.1em;
+  letter-spacing: 0.04em;
 }
 
-.section-lead {
-  order: 4;
-  width: 100%;
+.section-count {
   font-size: 14px;
   color: var(--muted);
 }
@@ -186,10 +165,10 @@ ol {
   justify-content: center;
   gap: 10px;
   min-height: 44px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  padding: 12px 30px;
+  letter-spacing: 0.02em;
+  padding: 10px 24px;
   border: 1px solid var(--btn);
   border-radius: 2px;
   color: #ffffff;
@@ -200,6 +179,16 @@ ol {
 .btn:hover {
   color: #ffffff;
   background: var(--btn-hover);
+  border-color: var(--btn-hover);
+}
+.btn-secondary {
+  background: transparent;
+  color: var(--link);
+  border-color: var(--btn);
+}
+.btn-secondary:hover {
+  background: var(--surface-2);
+  color: var(--fg);
   border-color: var(--btn-hover);
 }
 .btn-disabled {

@@ -1,36 +1,29 @@
 ---
-import { profile, links, changelog } from '../data/profile';
+import { profile, links, site } from '../data/profile';
 import { asset } from '../lib/url';
+
+const shown = links.filter((l) => l.url.trim() !== '');
 ---
 
 <footer class="footer">
   <div class="container footer-inner">
-    <details class="changelog">
-      <summary class="en">Changelog / 更新履歴</summary>
-      <ul>
-        {
-          changelog.map((c) => (
-            <li>
-              <time>{c.date}</time> {c.title}
-            </li>
-          ))
-        }
-      </ul>
-    </details>
-    <div class="footer-end">
-      <ul class="social">
-        {
-          links.map((l) => (
+    <p class="meta">
+      © 2026 {profile.nameEn}
+      <span>最終更新 <time datetime={site.updated}>{site.updated}</time></span>
+    </p>
+    {
+      shown.length > 0 && (
+        <ul class="social">
+          {shown.map((l) => (
             <li>
               <a href={l.url} target="_blank" rel="noopener noreferrer" aria-label={`${l.label} (新しいタブで開く)`}>
                 <img src={asset(`icons/${l.icon}.svg`)} alt="" width="32" height="32" />
               </a>
             </li>
-          ))
-        }
-      </ul>
-      <p class="copy">© 2026 {profile.nameEn}. Built with Astro.</p>
-    </div>
+          ))}
+        </ul>
+      )
+    }
   </div>
 </footer>
 
@@ -39,29 +32,20 @@ import { asset } from '../lib/url';
     background: #000000;
     color: var(--muted);
     border-top: 1px solid var(--line-soft);
-    padding-block: 32px 48px;
-    font-size: 12px;
+    padding-block: 24px 40px;
+    font-size: 13px;
   }
   .footer-inner {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     flex-wrap: wrap;
     gap: 16px;
   }
-  .changelog summary {
-    cursor: pointer;
-  }
-  .changelog ul {
-    list-style: none;
-    margin-top: 8px;
-    font-size: 13px;
-  }
-  .footer-end {
+  .meta {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 12px;
+    flex-wrap: wrap;
+    gap: 4px 20px;
   }
   .social {
     list-style: none;
@@ -75,25 +59,12 @@ import { asset } from '../lib/url';
     width: 44px;
     height: 44px;
     border-radius: 2px;
-    transition: opacity 0.2s;
   }
   .social a:hover {
-    opacity: 0.75;
-  }
-  .social a:focus-visible {
-    outline: 2px solid var(--link);
-    outline-offset: 2px;
+    background: var(--surface-2);
   }
   .social img {
     width: 32px;
     height: 32px;
-  }
-  .copy {
-    letter-spacing: 0.05em;
-  }
-  @media (max-width: 520px) {
-    .footer-end {
-      align-items: flex-start;
-    }
   }
 </style>

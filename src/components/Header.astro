@@ -1,21 +1,26 @@
 ---
-import { profile } from '../data/profile';
+import { profile, timeline } from '../data/profile';
 import { asset } from '../lib/url';
 
 // 作品の詳細ページからでもトップの各セクションへ移動できるよう、base 付きのパスにする
 const home = asset('');
+const filled = (s?: string) => typeof s === 'string' && s.trim() !== '';
+
+// トップでは中身が空のセクションを出さないので、メニューも同じ条件で出し分ける (リンク切れを防ぐ)
+const hasAbout = profile.about.some(filled) || profile.interests.some(filled);
+const hasHistory = timeline.some((e) => filled(e.title));
 
 const nav = [
-  { href: `${home}#about`, label: 'About' },
-  { href: `${home}#works`, label: 'Works' },
-  { href: `${home}#skills`, label: 'Skills' },
-  { href: `${home}#history`, label: 'History' },
-];
+  { href: `${home}#works`, label: '作品', show: true },
+  { href: `${home}#skills`, label: 'スキル', show: true },
+  { href: `${home}#about`, label: 'プロフィール', show: hasAbout },
+  { href: `${home}#history`, label: '経歴', show: hasHistory },
+].filter((n) => n.show);
 ---
 
 <header class="header">
   <div class="container header-inner">
-    <a class="logo en" href={home}>{profile.nameEn}</a>
+    <a class="logo" href={home}>{profile.nameEn}</a>
 
     <nav class="nav-pc" aria-label="ページ内メニュー">
       <ul>
@@ -23,12 +28,12 @@ const nav = [
       </ul>
     </nav>
 
-    <button class="menu-btn en" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu">メニュー</button>
   </div>
 
   <!-- スマホ用: 全画面の黒いメニュー -->
   <div class="menu" id="menu" hidden>
-    <button class="menu-close en" type="button">Close</button>
+    <button class="menu-close" type="button">閉じる</button>
     <nav aria-label="ページ内メニュー (スマホ)">
       <ul>
         {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
@@ -88,9 +93,7 @@ const nav = [
     list-style: none;
   }
   .nav-pc a {
-    font-size: 12px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    font-size: 14px;
     color: var(--muted);
     text-decoration: none;
   }
@@ -100,7 +103,7 @@ const nav = [
   .menu-btn,
   .menu-close {
     font: inherit;
-    font-size: 12px;
+    font-size: 14px;
     min-height: 44px;
     padding: 0 0 0 16px;
     background: none;
@@ -134,9 +137,7 @@ const nav = [
   .menu a {
     display: block;
     font-size: 20px;
-    font-weight: 300;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    font-weight: 400;
     color: var(--fg);
     text-decoration: none;
     padding: 16px 0;

@@ -1,150 +1,182 @@
 ---
+// 作品の詳細。読む順: 何か (種類・作品名・時期) → 概要 → ポイント → 使用技術 → 開く (行動)
+// 行動は1つに絞る。最初のリンクだけを塗りのボタンにし、2つ目以降は枠だけのボタンにする。
+// データが空の項目は見出しごと出さない。
 import type { Work } from '../data/profile';
 import { asset } from '../lib/url';
 import TechTags from './TechTags.astro';
 
 interface Props {
   work: Work;
-  index: number;
 }
-const { work, index } = Astro.props;
-const num = String(index + 1).padStart(2, '0');
+const { work } = Astro.props;
+const filled = (s?: string) => typeof s === 'string' && s.trim() !== '';
+
+const points = work.points.filter(filled);
+const links = work.links.filter((l) => filled(l.label));
 ---
 
 <article class="work" id={work.id}>
   <header class="work-head">
-    <p class="work-label en">
-      <span class="num">{num}</span>
-      {work.label}
-    </p>
-    <h1 class="work-title">{work.title}</h1>
-    <p class="work-period">{work.period}</p>
+    {filled(work.label) && <p class="work-kind">{work.label}</p>}
+    <h1 class="work-title">{filled(work.title) ? work.title : '(タイトル未設定)'}</h1>
+    {filled(work.period) && <p class="work-period">{work.period}</p>}
   </header>
 
   <div class:list={['work-body', { 'no-images': work.images.length === 0 }]}>
     <div class="work-text">
-      <p class="work-summary">{work.summary}</p>
+      {filled(work.summary) && <p class="work-summary">{work.summary}</p>}
 
       {
-        work.role && (
-          <div class="work-role">
-            <h2 class="sub en">Role / 役割・担当</h2>
-            <p>{work.role}</p>
-          </div>
+        filled(work.role) && (
+          <section>
+            <h2 class="sub">役割・担当</h2>
+            <p class="work-role">{work.role}</p>
+          </section>
         )
       }
 
-      <h2 class="sub en">Points / ポイント</h2>
-      <ul class="points">
-        {work.points.map((p) => <li>{p}</li>)}
-      </ul>
+      {
+        points.length > 0 && (
+          <section>
+            <h2 class="sub">ポイント</h2>
+            <ul class="points">
+              {points.map((p) => (
+                <li>{p}</li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
 
-      <h2 class="sub en">Tech / 使用技術</h2>
-      <TechTags items={work.tech} />
+      {
+        work.tech.length > 0 && (
+          <section>
+            <h2 class="sub">使用技術</h2>
+            <TechTags items={work.tech} />
+          </section>
+        )
+      }
 
-      <div class="work-links">
-        {
-          work.links.map((l) =>
-            l.url ? (
-              <a class="btn" href={l.url} target="_blank" rel="noopener noreferrer">
-                {l.label}
-                <span aria-hidden="true">↗</span>
-                <span class="visually-hidden">(新しいタブで開く)</span>
-              </a>
-            ) : (
-              <span class="btn btn-disabled" aria-disabled="true">
-                {l.label}: リンク未設定
-              </span>
-            ),
-          )
-        }
-      </div>
+      {
+        links.length > 0 && (
+          <div class="work-links">
+            {links.map((l, i) =>
+              filled(l.url) ? (
+                <a
+                  class:list={['btn', { 'btn-secondary': i > 0 }]}
+                  href={l.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {l.label} を開く
+                  <span class="visually-hidden">(新しいタブで開く)</span>
+                </a>
+              ) : (
+                <p class="link-missing">{l.label} のリンクが未設定です</p>
+              ),
+            )}
+          </div>
+        )
+      }
     </div>
 
-    {work.images.length > 0 && (
-    <ul class="gallery" aria-label={`${work.title} の画像`}>
-      {
-        work.images.map((img, i) => (
-          <li>
-            <figure>
-              <button
-                type="button"
-                class="shot"
-                data-full={asset(img.src)}
-                data-caption={img.caption}
-                aria-label={`画像${i + 1}を拡大: ${img.caption}`}
-              >
-                <img src={asset(img.src)} alt={img.alt} loading="lazy" width="1600" height="900" />
-              </button>
-              <figcaption>{img.caption}</figcaption>
-            </figure>
-          </li>
-        ))
-      }
-    </ul>
-    )}
+    {
+      work.images.length > 0 && (
+        <ul class="gallery" aria-label={`${work.title} の画像`}>
+          {work.images.map((img, i) => (
+            <li>
+              <figure>
+                <button
+                  type="button"
+                  class="shot"
+                  data-full={asset(img.src)}
+                  data-caption={img.caption}
+                  aria-label={`画像${i + 1}を拡大: ${img.caption}`}
+                >
+                  <img src={asset(img.src)} alt={img.alt} loading="lazy" width="1600" height="900" />
+                </button>
+                {filled(img.caption) && <figcaption>{img.caption}</figcaption>}
+              </figure>
+            </li>
+          ))}
+        </ul>
+      )
+    }
   </div>
 </article>
 
 <style>
   .work {
-    padding-block: clamp(32px, 5vw, 56px);
+    padding-block: clamp(24px, 4vw, 40px) clamp(40px, 6vw, 64px);
   }
-  .work-label {
-    font-size: 11px;
+  .work-kind {
+    font-size: 14px;
     color: var(--muted);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-  .num {
-    color: var(--mist);
   }
   .work-title {
-    font-size: clamp(28px, 4.5vw, 44px);
+    font-size: clamp(30px, 5vw, 48px);
     font-weight: 300;
-    line-height: 1.4;
-    letter-spacing: 0.05em;
-    margin-top: 12px;
+    line-height: 1.3;
+    letter-spacing: 0.02em;
+    margin-top: 8px;
     overflow-wrap: anywhere;
   }
   .work-period {
-    font-size: 13px;
+    font-size: 14px;
     color: var(--muted);
-    margin-top: 4px;
+    margin-top: 8px;
   }
   .work-body {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
-    gap: clamp(24px, 4vw, 48px);
-    margin-top: 32px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: clamp(24px, 4vw, 56px);
+    margin-top: clamp(24px, 4vw, 40px);
   }
   .work-body.no-images {
-    grid-template-columns: minmax(0, 710px);
+    grid-template-columns: minmax(0, 40em);
+  }
+  .work-summary {
+    font-size: 17px;
+    line-height: 1.85;
   }
   .sub {
-    font-size: 11px;
-    font-weight: 400;
-    color: var(--mist);
-    margin: 28px 0 8px;
+    font-size: 15px;
+    font-weight: 700;
+    margin: 32px 0 10px;
   }
-  .work-role p {
+  .work-role {
     padding: 14px 18px;
     background: var(--surface);
-    border-left: 2px solid var(--blue);
   }
   .points {
     padding-left: 1.2em;
+    color: var(--muted);
+  }
+  .points li {
+    padding-left: 0.2em;
+  }
+  .points li::marker {
+    color: var(--line);
   }
   .points li + li {
-    margin-top: 6px;
+    margin-top: 10px;
   }
   .work-links {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 12px;
-    margin-top: 32px;
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+  }
+  .link-missing {
+    font-size: 14px;
+    color: var(--danger);
+    padding: 10px 16px;
+    border: 1px dashed var(--danger);
+    border-radius: 2px;
   }
   .gallery {
     list-style: none;
@@ -168,13 +200,12 @@ const num = String(index + 1).padStart(2, '0');
     width: 100%;
     aspect-ratio: 16 / 9;
     object-fit: cover;
-    transition: opacity 0.2s;
   }
   .shot:hover img {
-    opacity: 0.7;
+    opacity: 0.8;
   }
   figcaption {
-    font-size: 12px;
+    font-size: 13px;
     line-height: 1.6;
     color: var(--muted);
     margin-top: 6px;

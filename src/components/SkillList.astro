@@ -6,10 +6,30 @@ import { asset } from '../lib/url';
 
 // アイコンがないスキルは、名前の頭2文字を白い四角に入れて代わりにする
 const initials = (name: string) => name.replace(/[^A-Za-z]/g, '').slice(0, 2) || name.slice(0, 1);
+
+// 比べやすいよう、分野ごとにレベルの高い順に並べる (同じレベルは profile.ts の順)。
+// 名前が空・重複しているスキルと、スキルが1つもない分野は出さない。
+const groups = skillGroups
+  .map((g) => {
+    const seen = new Set<string>();
+    const items = g.items
+      .filter((s) => {
+        const key = s.name.trim();
+        if (key === '' || seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      })
+      .map((s, i) => ({ s, i }))
+      .sort((a, b) => b.s.level - a.s.level || a.i - b.i)
+      .map(({ s }) => s);
+    return { title: g.title, items };
+  })
+  .filter((g) => g.items.length > 0);
 ---
 
+{groups.length === 0 && <p class="empty">スキルはまだありません。</p>}
 {
-  skillGroups.map((g) => (
+  groups.map((g) => (
     <div class="skill-group">
       <h3 class="skill-group-title">{g.title}</h3>
       <ul class="skills">
@@ -39,6 +59,9 @@ const initials = (name: string) => name.replace(/[^A-Za-z]/g, '').slice(0, 2) ||
 }
 
 <style>
+  .empty {
+    color: var(--muted);
+  }
   .skill-group + .skill-group {
     margin-top: 48px;
   }

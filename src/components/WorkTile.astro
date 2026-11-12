@@ -1,28 +1,37 @@
 ---
-// 作品一覧のカード。クリックすると作品の詳細ページへ移動する。
+// 作品一覧のカード。カード全体が作品の詳細ページへのリンク。
+// 読む順: 種類 → 作品名 → 一言説明 → 使用技術 → 時期と足りないもの
 import type { Work } from '../data/profile';
 import { asset } from '../lib/url';
 import TechTags from './TechTags.astro';
 
 interface Props {
   work: Work;
-  index: number;
 }
-const { work, index } = Astro.props;
-const num = String(index + 1).padStart(2, '0');
+const { work } = Astro.props;
+const filled = (s?: string) => typeof s === 'string' && s.trim() !== '';
+
+// 提出前に気づけるよう、URL が空のリンクと画像がないことをカードにも出す
+const missingLinks = work.links.filter((l) => !filled(l.url)).length;
+const noImages = work.images.length === 0;
 ---
 
 <a class="tile" href={asset(`works/${work.id}/`)}>
-  <p class="tile-label en">
-    <span class="num">{num}</span>
-    {work.label}
+  {filled(work.label) && <p class="tile-kind">{work.label}</p>}
+  <h3 class="tile-title">{filled(work.title) ? work.title : '(タイトル未設定)'}</h3>
+  {filled(work.short) && <p class="tile-short">{work.short}</p>}
+  {
+    work.tech.length > 0 && (
+      <div class="tile-tech">
+        <TechTags items={work.tech.slice(0, 5)} size="small" />
+      </div>
+    )
+  }
+  <p class="tile-meta">
+    {filled(work.period) && <span>{work.period}</span>}
+    {noImages && <span>画像なし</span>}
+    {missingLinks > 0 && <span class="warn">リンク未設定 {missingLinks}件</span>}
   </p>
-  <h3 class="tile-title">{work.title}</h3>
-  <p class="tile-short">{work.short}</p>
-  <div class="tile-tech">
-    <TechTags items={work.tech.slice(0, 4)} size="small" />
-  </div>
-  <span class="tile-more en">View <span aria-hidden="true">→</span></span>
 </a>
 
 <style>
@@ -30,49 +39,58 @@ const num = String(index + 1).padStart(2, '0');
     display: flex;
     flex-direction: column;
     height: 100%;
-    padding: 32px;
+    padding: clamp(24px, 3vw, 32px);
     background: var(--surface);
     color: var(--fg);
     text-decoration: none;
-    transition: background 0.2s;
   }
   .tile:hover {
     background: var(--surface-2);
     color: var(--fg);
   }
-  .tile-label {
-    font-size: 11px;
-    color: var(--muted);
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+  .tile:hover .tile-title {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
   }
-  .num {
-    color: var(--mist);
+  .tile-kind {
+    font-size: 13px;
+    color: var(--muted);
   }
   .tile-title {
-    font-size: clamp(20px, 2vw, 22px);
+    font-size: clamp(20px, 2.2vw, 24px);
     font-weight: 700;
     line-height: 1.4;
-    margin-top: 16px;
-    overflow-wrap: break-word;
+    margin-top: 6px;
+    overflow-wrap: anywhere;
   }
   .tile-short {
-    font-size: 14px;
+    font-size: 15px;
     line-height: 1.7;
     color: var(--muted);
-    margin-top: 10px;
+    margin-top: 8px;
+    /* 長い説明は3行で切る */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
   .tile-tech {
     margin-top: 16px;
   }
-  .tile-more {
+  .tile-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
     margin-top: auto;
-    padding-top: 24px;
-    font-size: 12px;
-    color: var(--link);
+    padding-top: 20px;
+    font-size: 13px;
+    color: var(--muted);
   }
-  .tile:hover .tile-more {
-    text-decoration: underline;
+  .tile-meta:empty {
+    display: none;
+  }
+  .warn {
+    color: var(--danger);
   }
 </style>
