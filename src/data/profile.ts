@@ -98,7 +98,7 @@ export const works: Work[] = [
     ],
     tech: ['Python', 'Google Colab'],
     // Colab の共有設定は「リンクを知っている全員」にしておく
-    links: [{ label: 'Google Colab', url: '' }],
+    links: [{ label: 'Google Colab', url: 'https://colab.research.google.com/drive/1vIcLuIRCimUl6l2JwmR1BPT42bFl2SbV' }],
     images: [
       { src: placeholder, alt: '【要記入】画像の説明', caption: '【要記入】スクリーンショット1の説明' },
       { src: placeholder, alt: '【要記入】画像の説明', caption: '【要記入】スクリーンショット2の説明' },
