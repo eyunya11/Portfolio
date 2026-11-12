@@ -79,6 +79,8 @@ const links = work.links.filter((l) => filled(l.label));
           </div>
         )
       }
+
+      {filled(work.linkNote) && <p class="link-note">{work.linkNote}</p>}
     </div>
 
     {
@@ -170,6 +172,19 @@ const links = work.links.filter((l) => filled(l.label));
     margin-top: 40px;
     padding-top: 24px;
     border-top: 1px solid var(--line-soft);
+  }
+  /* リンクがない理由などの補足。状態の表示なので色は付けない */
+  .link-note {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .work-links + .link-note {
+    margin-top: 12px;
+    padding-top: 0;
+    border-top: none;
   }
   .link-missing {
     font-size: 14px;

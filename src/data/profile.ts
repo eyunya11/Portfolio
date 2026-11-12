@@ -59,6 +59,8 @@ export type Work = {
   points: string[];
   tech: string[];
   links: Link[];
+  /** リンクの代わりに出す補足 (例: リポジトリが非公開であること) */
+  linkNote?: string;
   images: Shot[];
 };
 
@@ -74,9 +76,8 @@ export const techIcons: Record<string, string[]> = {
   Unity: ['unity'],
   Gradle: ['gradle'],
   'GitHub Actions': ['githubactions'],
+  'Git / GitHub': ['git', 'github'],
 };
-
-const placeholder = 'images/placeholder.svg';
 
 export const works: Work[] = [
   {
@@ -99,34 +100,32 @@ export const works: Work[] = [
     tech: ['Python', 'Google Colab'],
     // Colab の共有設定は「リンクを知っている全員」にしておく
     links: [{ label: 'Google Colab', url: 'https://colab.research.google.com/drive/1vIcLuIRCimUl6l2JwmR1BPT42bFl2SbV' }],
-    images: [
-      { src: placeholder, alt: '【要記入】画像の説明', caption: '【要記入】スクリーンショット1の説明' },
-      { src: placeholder, alt: '【要記入】画像の説明', caption: '【要記入】スクリーンショット2の説明' },
-      { src: placeholder, alt: '【要記入】画像の説明', caption: '【要記入】スクリーンショット3の説明' },
-      { src: placeholder, alt: '【要記入】画像の説明', caption: '【要記入】スクリーンショット4の説明' },
-    ],
+    // 【要記入】課題の条件: 画像を4枚以上。public/images/kadai04/ に置いて、ここに足す。
+    // 例: { src: 'images/kadai04/01.png', alt: 'ゲーム設定のフォーム', caption: 'Colab のフォームで設定を変えられる' },
+    // 候補: ゲーム設定のフォーム / 自分の手番の入力 / 役の判定結果 / 最後のランキング
+    images: [],
   },
   {
     id: 'festival',
     label: '高専祭 2026 プロジェクト',
-    title: '【要記入】成果物のタイトル',
-    short: '【要記入】大まかな機能を一言で',
-    period: '【要記入】2026年〇月〜〇月',
-    summary: '【要記入】チームで何を作って展示したか、2〜3文で説明する。',
-    role: '【要記入】自分の役割・担当(例: 〇人チームで、〇〇の実装を担当)',
+    title: 'ゴミ分別ゲーム',
+    short: '選んだ自治体の分別ルールで正解が変わる、スマートフォン向けのゴミ分別ゲーム',
+    period: '2026年5月〜11月',
+    summary:
+      '高専祭に向けてチームで開発した、Unity 製のスマートフォン向けアクションゲームです。ベルトで流れてくるゴミを、キャップやラベルなどのパーツに分解し、正しいゴミ箱へドラッグして捨てます。選んだ自治体の実際の分別ルールによって正解が変わるのが、このゲームの中心です。',
+    role: 'プログラム担当。ゲーム本体のプログラムの大部分を書きました。ほかに、ゴミのデータを編集する専用の Windows アプリと、ゴミのデータとイラストを作るメンバー向けの作業手順書も作りました。',
     points: [
-      '【要記入】自分が担当した部分の具体的な内容 1',
-      '【要記入】自分が担当した部分の具体的な内容 2',
-      '【要記入】チームで取り組んで学んだこと',
+      'ゴミのデータには、ゴミ箱の名前を持たせず、素材や状態のタグだけを持たせました。自治体ごとの「このタグの組み合わせはこのゴミ箱」というルールで正解を決め、各自治体は全国共通の標準ルールと違うところだけを書けば済むようにしました。ゴミのデータを変えずに地域を増やせ、今は大阪市・寝屋川市の2地域に対応しています。',
+      'ゴミを運ぶ操作はドラッグ、分解は外したいパーツをタップする操作にしました。2つが混ざらないよう、ドラッグとみなす距離を画面の細かさから計算しています。',
+      'ゴミ制作班が Excel を使わずにゴミのデータを編集できる、専用の Windows アプリを1人で作りました。入力しながら Unity の取り込みと同じチェックが走り、イラスト(PSD)のゲームでの見え方や、地域ごとの判定の結果もその場で確かめられます。Unity を使ったことのないメンバーでも、このアプリと Git だけで作業できます。',
+      'ゴミのデータを Unity に取り込むツールと、分別の判定を確かめる自動テストも作り、入力ミスや判定の間違いがゲームに入らないようにしました。',
     ],
-    tech: ['【要記入】使った言語・ツール'],
-    links: [{ label: 'GitHub リポジトリ', url: '' }],
-    images: [
-      { src: placeholder, alt: '【要記入】画像の説明', caption: '【要記入】スクリーンショット1の説明' },
-      { src: placeholder, alt: '【要記入】画像の説明', caption: '【要記入】スクリーンショット2の説明' },
-      { src: placeholder, alt: '【要記入】画像の説明', caption: '【要記入】スクリーンショット3の説明' },
-      { src: placeholder, alt: '【要記入】画像の説明', caption: '【要記入】スクリーンショット4の説明' },
-    ],
+    tech: ['C#', 'Unity', 'WPF (.NET)', 'Git / GitHub'],
+    // 開発リポジトリは非公開なので、リンクは載せずに説明だけを載せる
+    links: [],
+    linkNote: 'チームの開発リポジトリは非公開のため、リンクは載せていません。',
+    // 【要記入】課題の条件: 画像を4枚以上。public/images/festival/ に置いて、ここに足す。
+    images: [],
   },
   {
     id: 'create-train-next',
