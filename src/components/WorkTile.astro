@@ -30,7 +30,7 @@ const noImages = work.images.length === 0;
   <p class="tile-meta">
     {filled(work.period) && <span>{work.period}</span>}
     {noImages && <span>画像なし</span>}
-    {missingLinks > 0 && <span class="warn">リンク未設定 {missingLinks}件</span>}
+    {missingLinks > 0 && <span class="warn">リンク未設定({missingLinks}件)</span>}
   </p>
 </a>
 

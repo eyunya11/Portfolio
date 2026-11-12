@@ -15,12 +15,12 @@ const filled = (s?: string) => typeof s === 'string' && s.trim() !== '';
 const about = profile.about.filter(filled);
 const interests = [...new Set(profile.interests.filter(filled))];
 const events = timeline.filter((e) => filled(e.title));
-const affiliation = [profile.school, profile.grade].filter(filled).join(' ');
+const affiliation = [profile.school, profile.grade].filter(filled).join('');
 ---
 
 <Base
   title={`${profile.nameEn} | ${site.title}`}
-  description={`${affiliation} のポートフォリオ`}
+  description={`${affiliation}のポートフォリオ`}
 >
   <Header />
 
