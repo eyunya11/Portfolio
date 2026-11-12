@@ -19,8 +19,10 @@ const { title, description } = Astro.props;
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <!-- サイトアイコン (頭文字 e)。.ico は SVG に対応していない古いブラウザ用。
+         sizes を付けておくと、SVG に対応したブラウザは SVG のほうを選ぶ -->
+    <link rel="icon" href={asset('favicon.ico')} sizes="32x32" />
     <link rel="icon" type="image/svg+xml" href={asset('favicon.svg')} />
-    <link rel="icon" href={asset('favicon.ico')} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
