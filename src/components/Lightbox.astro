@@ -32,9 +32,10 @@
     width: min(1200px, 94vw);
     max-height: 92vh;
     padding: 16px;
-    border: none;
-    background: var(--white);
-    color: var(--black);
+    border: 1px solid var(--line-soft);
+    border-radius: 2px;
+    background: var(--bg);
+    color: var(--fg);
   }
   .lightbox::backdrop {
     background: rgba(0, 0, 0, 0.85);
@@ -47,16 +48,16 @@
   .lb-close {
     font: inherit;
     font-size: 12px;
-    font-weight: 700;
-    padding: 8px 16px 6px;
-    color: var(--white);
-    background: var(--black);
-    border: 1px solid var(--black);
+    min-height: 44px;
+    padding: 0 20px;
+    color: var(--fg);
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 2px;
     cursor: pointer;
   }
   .lb-close:hover {
-    color: var(--black);
-    background: var(--white);
+    background: var(--surface-2);
   }
   .lb-img {
     width: 100%;
@@ -65,6 +66,7 @@
   }
   .lb-caption {
     margin-top: 10px;
-    font-size: 13px;
+    font-size: 14px;
+    color: var(--muted);
   }
 </style>

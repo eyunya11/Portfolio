@@ -1,21 +1,35 @@
 /* =====================================================================
    配色 (詳しくは README.md の「配色の設計」)
-   - 白 #ffffff と黒 #000000 の2色を基本にした、装飾のないモノクローム
-   - 差し色は赤 #c8102e の1色だけ。白い面の上でだけ使う
-     (黒の上ではコントラストが 3.57:1 まで下がるため)
-   - 角丸なし・影なし・グラデーションなし
+   - 背景は純黒ではない暗い灰色 #111111。長時間読んでも目が疲れにくい
+   - 文字は白 #ffffff、補足は明るい灰色 #c8c8c8
+   - アクセントは青。文字のリンクは背景とのコントラスト比 4.5:1 以上を
+     確保するため、明るめの #7a9af2 を使う (#3865e0 は 3.69:1 で足りない)
+   - 注意を引く表示 (リンク未設定) だけ赤 #ff5a5a
+   - 影は使わず、面の明るさの違いで奥行きを出す。角丸は 2〜3px まで
    ===================================================================== */
 :root {
-  --white: #ffffff;
-  --black: #000000;
-  --ink: #222222;
-  --accent: #c8102e;
+  --bg: #111111;
+  --surface: #1a1a1a;
+  --surface-2: #232323;
+  --fg: #ffffff;
+  --muted: #c8c8c8;
+  --mist: rgba(255, 255, 255, 0.5);
+  --line: #646464;
+  --line-soft: #2e2e2e;
 
-  --font-sans: 'Helvetica Neue', Helvetica, Arial, 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+  --link: #7a9af2;
+  --blue: #3865e0;
+  --btn: #2d75c7;
+  --btn-hover: #3865e0;
+  --danger: #ff5a5a;
 
-  --width: 1200px;
-  --gutter: clamp(16px, 4vw, 40px);
-  --header-h: 56px;
+  --font-sans: 'Inter', 'Noto Sans JP', Arial, 'Helvetica Neue', Meiryo, 'Hiragino Kaku Gothic ProN', sans-serif;
+
+  --content: 1088px;
+  --gutter: clamp(24px, 6vw, 96px);
+  --header-h: 68px;
+
+  color-scheme: dark;
 }
 
 *,
@@ -32,13 +46,14 @@ html {
 
 body {
   margin: 0;
-  background: var(--white);
-  color: var(--black);
+  background: var(--bg);
+  color: var(--fg);
   font-family: var(--font-sans);
-  font-size: 15px;
-  line-height: 1.8;
-  letter-spacing: 0;
-  font-feature-settings: 'palt';
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.75;
+  letter-spacing: normal;
+  overflow-wrap: break-word;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -49,17 +64,17 @@ img {
 }
 
 a {
-  color: inherit;
+  color: var(--link);
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
 }
 a:hover {
-  color: var(--accent);
+  color: var(--fg);
 }
 
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--link);
   outline-offset: 2px;
 }
 
@@ -69,6 +84,7 @@ h3,
 h4 {
   margin: 0;
   font-weight: 700;
+  line-height: 1.5;
 }
 
 p {
@@ -83,14 +99,16 @@ ol {
 
 .container {
   width: 100%;
-  max-width: var(--width);
+  max-width: calc(var(--content) + var(--gutter) * 2);
   margin-inline: auto;
   padding-inline: var(--gutter);
 }
 
+/* 英字の小さなラベル (広めの字間) */
 .en {
   text-transform: uppercase;
-  font-weight: 700;
+  letter-spacing: 0.1em;
+  font-feature-settings: 'palt';
 }
 
 .visually-hidden {
@@ -104,84 +122,97 @@ ol {
 
 /* ---------- セクション共通 ---------- */
 .section {
-  padding-block: clamp(72px, 10vw, 128px);
+  padding-block: clamp(64px, 9vw, 112px);
+  border-top: 1px solid var(--line-soft);
 }
 
 .section-head {
   display: flex;
-  align-items: flex-end;
-  gap: 16px;
+  align-items: baseline;
+  gap: 8px 16px;
   flex-wrap: wrap;
-  margin-bottom: clamp(32px, 5vw, 56px);
+  margin-bottom: clamp(32px, 5vw, 48px);
 }
 
 .section-num {
   font-size: 12px;
-  font-weight: 700;
-  color: var(--accent);
-  align-self: flex-start;
-}
-
-.section-title {
-  font-size: clamp(32px, 6vw, 56px);
-  line-height: 1.03;
-  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--mist);
 }
 
 .section-sub {
-  font-size: 13px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.section-title {
+  width: 100%;
+  order: 3;
+  font-size: 24px;
   font-weight: 700;
+  line-height: 1.5;
+  font-feature-settings: 'palt';
+  letter-spacing: 0.1em;
 }
 
 .section-lead {
+  order: 4;
   width: 100%;
   font-size: 14px;
-  color: var(--ink);
+  color: var(--muted);
 }
 
 /* ---------- タグ ---------- */
 .tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
   list-style: none;
 }
 .tag {
   font-size: 12px;
-  font-weight: 700;
   line-height: 1.6;
-  padding: 2px 8px;
-  border: 1px solid var(--black);
+  letter-spacing: 0.05em;
+  padding: 3px 10px;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  color: var(--muted);
 }
 
-/* ---------- ボタン型リンク (黒ベタ・白文字・角丸なし) ---------- */
+/* ---------- ボタン型リンク ---------- */
 .btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
+  min-height: 44px;
   font-size: 12px;
   font-weight: 700;
-  text-transform: uppercase;
-  padding: 12px 20px 10px;
-  border: 1px solid var(--black);
-  color: var(--white);
-  background: var(--black);
+  letter-spacing: 0.08em;
+  padding: 12px 30px;
+  border: 1px solid var(--btn);
+  border-radius: 2px;
+  color: #ffffff;
+  background: var(--btn);
   text-decoration: none;
+  transition: background 0.15s;
 }
 .btn:hover {
-  color: var(--black);
-  background: var(--white);
+  color: #ffffff;
+  background: var(--btn-hover);
+  border-color: var(--btn-hover);
 }
 .btn-disabled {
   border-style: dashed;
-  border-color: var(--accent);
-  color: var(--accent);
-  background: var(--white);
+  border-color: var(--danger);
+  color: var(--danger);
+  background: transparent;
   cursor: not-allowed;
-  text-transform: none;
 }
 .btn-disabled:hover {
-  color: var(--accent);
+  color: var(--danger);
+  background: transparent;
+  border-color: var(--danger);
 }
 
 @media (prefers-reduced-motion: reduce) {

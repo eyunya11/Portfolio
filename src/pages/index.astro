@@ -7,21 +7,17 @@ import SkillList from '../components/SkillList.astro';
 import {
   site,
   profile,
-  links,
   works,
   levels,
   timeline,
-  certifications,
 } from '../data/profile';
 
 const levelKeys = Object.keys(levels).map(Number) as (keyof typeof levels)[];
-
-const certs = certifications.length > 0 ? certifications : [{ date: '—', title: '準備中' }];
 ---
 
 <Base
   title={`${profile.nameEn} | ${site.title}`}
-  description={`${profile.school} ${profile.course} ${profile.grade} のポートフォリオ`}
+  description={`${profile.school} ${profile.grade} のポートフォリオ`}
 >
   <Header />
 
@@ -31,20 +27,15 @@ const certs = certifications.length > 0 ? certifications : [{ date: '—', title
       <div class="container">
         <p class="hero-kicker en">Portfolio — v{site.version}</p>
         <h1 class="hero-name">{profile.name}</h1>
-        <p class="hero-en en">{profile.nameEn}</p>
         <p class="hero-tagline">{profile.tagline}</p>
         <dl class="hero-meta">
           <div>
             <dt class="en">School</dt>
-            <dd>{profile.school} {profile.course}</dd>
+            <dd>{profile.school}</dd>
           </div>
           <div>
             <dt class="en">Grade</dt>
             <dd>{profile.grade}</dd>
-          </div>
-          <div>
-            <dt class="en">Age</dt>
-            <dd>{profile.age}</dd>
           </div>
         </dl>
         <p class="hero-updated en">Updated {site.updated}</p>
@@ -56,8 +47,8 @@ const certs = certifications.length > 0 ? certifications : [{ date: '—', title
       <div class="container">
         <div class="section-head">
           <span class="section-num">01</span>
-          <h2 class="section-title">About</h2>
-          <p class="section-sub">プロフィール</p>
+          <p class="section-sub en">About</p>
+          <h2 class="section-title">プロフィール</h2>
         </div>
         <div class="about">
           <div class="about-text">
@@ -78,8 +69,8 @@ const certs = certifications.length > 0 ? certifications : [{ date: '—', title
       <div class="container">
         <div class="section-head">
           <span class="section-num">02</span>
-          <h2 class="section-title">Works</h2>
-          <p class="section-sub">制作物</p>
+          <p class="section-sub en">Works</p>
+          <h2 class="section-title">制作物</h2>
           <p class="section-lead">カードを選ぶと、作品の詳細ページを表示します。</p>
         </div>
         <ul class="works-grid">
@@ -93,10 +84,10 @@ const certs = certifications.length > 0 ? certifications : [{ date: '—', title
       <div class="container">
         <div class="section-head">
           <span class="section-num">03</span>
-          <h2 class="section-title">Skills</h2>
-          <p class="section-sub">スキル・経験</p>
+          <p class="section-sub en">Skills</p>
+          <h2 class="section-title">スキル・経験</h2>
           <p class="section-lead">
-            使用経験を3段階で示しています。アイコンを選ぶと、実際に何をしたかの説明を表示します。
+            使用経験を3段階で示しています。実際に作ったものは、上の「制作物」で紹介しています。
           </p>
         </div>
 
@@ -129,66 +120,22 @@ const certs = certifications.length > 0 ? certifications : [{ date: '—', title
       <div class="container">
         <div class="section-head">
           <span class="section-num">04</span>
-          <h2 class="section-title">History</h2>
-          <p class="section-sub">経歴・活動・資格</p>
+          <p class="section-sub en">History</p>
+          <h2 class="section-title">経歴・活動</h2>
         </div>
-        <div class="history">
-          <div>
-            <h3 class="side-title en">Career / 経歴・活動</h3>
-            <ol class="timeline">
-              {
-                timeline.map((e) => (
-                  <li>
-                    <time>{e.date}</time>
-                    <div>
-                      <p class="tl-title">{e.title}</p>
-                      {e.desc && <p class="tl-desc">{e.desc}</p>}
-                    </div>
-                  </li>
-                ))
-              }
-            </ol>
-          </div>
-          <div>
-            <h3 class="side-title en">Certification / 資格</h3>
-            <ol class="timeline">
-              {
-                certs.map((e) => (
-                  <li>
-                    <time>{e.date}</time>
-                    <div>
-                      <p class="tl-title">{e.title}</p>
-                    </div>
-                  </li>
-                ))
-              }
-            </ol>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== Contact ===== -->
-    <section class="section" id="contact">
-      <div class="container">
-        <div class="section-head">
-          <span class="section-num">05</span>
-          <h2 class="section-title">Contact</h2>
-          <p class="section-sub">リンク</p>
-        </div>
-        <ul class="contact">
+        <ol class="timeline">
           {
-            links.map((l) => (
+            timeline.map((e) => (
               <li>
-                <a class="btn" href={l.url} target="_blank" rel="noopener noreferrer">
-                  {l.label}
-                  <span aria-hidden="true">↗</span>
-                  <span class="visually-hidden">(新しいタブで開く)</span>
-                </a>
+                <time>{e.date}</time>
+                <div>
+                  <p class="tl-title">{e.title}</p>
+                  {e.desc && <p class="tl-desc">{e.desc}</p>}
+                </div>
               </li>
             ))
           }
-        </ul>
+        </ol>
       </div>
     </section>
   </main>
@@ -197,69 +144,71 @@ const certs = certifications.length > 0 ? certifications : [{ date: '—', title
 </Base>
 
 <style>
-  /* ---------- Hero: 黒面に白文字 (21:1) ---------- */
+  /* ---------- Hero: 画面いっぱいの暗い面に、細い文字で名前を置く ---------- */
   .hero {
-    background: var(--black);
-    color: var(--white);
-    padding-block: clamp(80px, 14vw, 176px) clamp(48px, 8vw, 96px);
-  }
-  .hero :focus-visible {
-    outline-color: var(--white);
+    position: relative;
+    min-height: calc(100svh - var(--header-h));
+    display: flex;
+    align-items: center;
+    padding-block: 96px;
+    background: var(--bg);
   }
   .hero-kicker {
     font-size: 12px;
+    color: var(--mist);
   }
   .hero-name {
-    font-size: clamp(40px, 9vw, 96px);
-    line-height: 1.03;
-    margin-top: 20px;
-    width: fit-content;
-  }
-  .hero-en {
-    font-size: 16px;
+    font-size: clamp(32px, 6vw, 64px);
+    font-weight: 300;
     line-height: 1.4;
-    margin-top: 16px;
+    letter-spacing: 0.1em;
+    margin-top: 24px;
   }
   .hero-tagline {
-    font-size: clamp(16px, 2.2vw, 20px);
+    font-size: clamp(20px, 2.6vw, 31.5px);
+    font-weight: 300;
+    line-height: 2;
+    letter-spacing: 0.1em;
     margin-top: 32px;
   }
   .hero-meta {
     display: flex;
     flex-wrap: wrap;
-    gap: 0;
+    gap: 16px 48px;
     margin: 48px 0 0;
-    border-top: 1px solid var(--white);
-  }
-  .hero-meta div {
-    padding: 14px 40px 0 0;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
   }
   .hero-meta dt {
     font-size: 11px;
+    color: var(--mist);
   }
   .hero-meta dd {
-    margin: 2px 0 0;
-    font-weight: 700;
+    margin: 4px 0 0;
+    font-size: 15px;
   }
   .hero-updated {
-    margin-top: 48px;
+    margin-top: 40px;
     font-size: 11px;
+    color: var(--mist);
   }
 
   /* ---------- About ---------- */
   .about {
     display: grid;
     grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
-    gap: clamp(32px, 5vw, 72px);
+    gap: clamp(32px, 5vw, 64px);
   }
   .about-text {
-    font-size: 16px;
+    max-width: 710px;
   }
   .about-text p + p {
     margin-top: 1em;
   }
   .side-title {
     font-size: 11px;
+    font-weight: 400;
+    color: var(--mist);
     margin-bottom: 14px;
   }
 
@@ -267,38 +216,32 @@ const certs = certifications.length > 0 ? certifications : [{ date: '—', title
   .works-grid {
     list-style: none;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: 8px;
   }
 
-  /* ---------- Skills ---------- */
+  /* ---------- Skills: レベルの説明 ---------- */
   .legend {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 4px;
-    margin: 0 0 64px;
+    gap: 8px;
+    margin: 0 0 48px;
   }
   .legend-item {
-    padding: 16px 20px;
-    background: var(--black);
-    color: var(--white);
-  }
-  .legend-item .dot {
-    border-color: var(--white);
-  }
-  .legend-item .dot.on {
-    background: var(--white);
+    padding: 20px 24px;
+    background: var(--surface);
   }
   .legend-item dd {
     margin: 8px 0 0;
     font-size: 13px;
     line-height: 1.7;
+    color: var(--muted);
   }
   .lv {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
     white-space: nowrap;
   }
@@ -309,51 +252,40 @@ const certs = certifications.length > 0 ? certifications : [{ date: '—', title
   .dot {
     width: 9px;
     height: 9px;
-    border: 1px solid var(--black);
+    border: 1px solid var(--fg);
   }
   .dot.on {
-    background: var(--black);
+    background: var(--fg);
   }
+
   /* ---------- History ---------- */
-  .history {
-    display: grid;
-    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
-    gap: clamp(32px, 5vw, 72px);
-  }
   .timeline {
     list-style: none;
+    max-width: 710px;
   }
   .timeline li {
     display: grid;
     grid-template-columns: 8em minmax(0, 1fr);
     gap: 16px;
-    padding: 14px 0;
-    border-top: 1px solid var(--black);
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line-soft);
   }
   .timeline time {
     font-size: 13px;
-    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--muted);
   }
   .tl-title {
-    font-weight: 700;
+    letter-spacing: 0.05em;
   }
   .tl-desc {
     font-size: 13px;
-    color: var(--ink);
-  }
-
-  /* ---------- Contact ---------- */
-  .contact {
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+    color: var(--muted);
   }
 
 
   @media (max-width: 860px) {
-    .about,
-    .history {
+    .about {
       grid-template-columns: 1fr;
     }
     .legend {

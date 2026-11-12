@@ -1,6 +1,7 @@
 ---
 import type { Work } from '../data/profile';
 import { asset } from '../lib/url';
+import TechTags from './TechTags.astro';
 
 interface Props {
   work: Work;
@@ -39,9 +40,7 @@ const num = String(index + 1).padStart(2, '0');
       </ul>
 
       <h2 class="sub en">Tech / 使用技術</h2>
-      <ul class="tags">
-        {work.tech.map((t) => <li class="tag">{t}</li>)}
-      </ul>
+      <TechTags items={work.tech} />
 
       <div class="work-links">
         {
@@ -89,76 +88,80 @@ const num = String(index + 1).padStart(2, '0');
 
 <style>
   .work {
-    padding-block: clamp(40px, 6vw, 72px);
+    padding-block: clamp(32px, 5vw, 56px);
   }
   .work-label {
-    font-size: 12px;
+    font-size: 11px;
+    color: var(--muted);
     display: flex;
     align-items: center;
     gap: 10px;
     flex-wrap: wrap;
   }
   .num {
-    color: var(--accent);
+    color: var(--mist);
   }
   .work-title {
-    font-size: clamp(32px, 6vw, 56px);
-    line-height: 1.03;
+    font-size: clamp(28px, 4.5vw, 44px);
+    font-weight: 300;
+    line-height: 1.4;
+    letter-spacing: 0.05em;
+    margin-top: 12px;
     overflow-wrap: anywhere;
-    margin-top: 10px;
   }
   .work-period {
     font-size: 13px;
-    color: var(--ink);
-    margin-top: 6px;
+    color: var(--muted);
+    margin-top: 4px;
   }
   .work-body {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
-    gap: clamp(24px, 4vw, 56px);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    gap: clamp(24px, 4vw, 48px);
     margin-top: 32px;
   }
-  /* 画像がない作品は、文章だけを読みやすい幅で表示する */
   .work-body.no-images {
-    grid-template-columns: minmax(0, 52em);
+    grid-template-columns: minmax(0, 710px);
   }
   .sub {
     font-size: 11px;
+    font-weight: 400;
+    color: var(--mist);
     margin: 28px 0 8px;
   }
   .work-role p {
-    padding: 12px 16px;
-    background: var(--black);
-    color: var(--white);
+    padding: 14px 18px;
+    background: var(--surface);
+    border-left: 2px solid var(--blue);
   }
   .points {
     padding-left: 1.2em;
   }
   .points li + li {
-    margin-top: 4px;
+    margin-top: 6px;
   }
   .work-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 12px;
     margin-top: 32px;
   }
   .gallery {
     list-style: none;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 4px 4px;
+    gap: 8px;
     align-content: start;
   }
   figure {
-    margin: 0 0 12px;
+    margin: 0 0 8px;
   }
   .shot {
     display: block;
     width: 100%;
     padding: 0;
     border: none;
-    background: #eeeeee;
+    background: var(--surface);
     cursor: zoom-in;
   }
   .shot img {
@@ -168,11 +171,12 @@ const num = String(index + 1).padStart(2, '0');
     transition: opacity 0.2s;
   }
   .shot:hover img {
-    opacity: 0.8;
+    opacity: 0.7;
   }
   figcaption {
     font-size: 12px;
     line-height: 1.6;
+    color: var(--muted);
     margin-top: 6px;
   }
   @media (max-width: 860px) {

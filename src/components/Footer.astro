@@ -1,5 +1,6 @@
 ---
-import { profile, changelog } from '../data/profile';
+import { profile, links, changelog } from '../data/profile';
+import { asset } from '../lib/url';
 ---
 
 <footer class="footer">
@@ -16,20 +17,30 @@ import { profile, changelog } from '../data/profile';
         }
       </ul>
     </details>
-    <p class="copy">© 2026 {profile.nameEn}. Built with Astro.</p>
+    <div class="footer-end">
+      <ul class="social">
+        {
+          links.map((l) => (
+            <li>
+              <a href={l.url} target="_blank" rel="noopener noreferrer" aria-label={`${l.label} (新しいタブで開く)`}>
+                <img src={asset(`icons/${l.icon}.svg`)} alt="" width="32" height="32" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="copy">© 2026 {profile.nameEn}. Built with Astro.</p>
+    </div>
   </div>
 </footer>
 
 <style>
-  /* 黒面 */
   .footer {
-    background: var(--black);
-    color: var(--white);
+    background: #000000;
+    color: var(--muted);
+    border-top: 1px solid var(--line-soft);
     padding-block: 32px 48px;
-    font-size: 11px;
-  }
-  .footer :focus-visible {
-    outline-color: var(--white);
+    font-size: 12px;
   }
   .footer-inner {
     display: flex;
@@ -45,5 +56,44 @@ import { profile, changelog } from '../data/profile';
     list-style: none;
     margin-top: 8px;
     font-size: 13px;
+  }
+  .footer-end {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+  }
+  .social {
+    list-style: none;
+    display: flex;
+    gap: 8px;
+  }
+  /* 指で押しやすいよう、押せる範囲は 44px 四方にする */
+  .social a {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 2px;
+    transition: opacity 0.2s;
+  }
+  .social a:hover {
+    opacity: 0.75;
+  }
+  .social a:focus-visible {
+    outline: 2px solid var(--link);
+    outline-offset: 2px;
+  }
+  .social img {
+    width: 32px;
+    height: 32px;
+  }
+  .copy {
+    letter-spacing: 0.05em;
+  }
+  @media (max-width: 520px) {
+    .footer-end {
+      align-items: flex-start;
+    }
   }
 </style>

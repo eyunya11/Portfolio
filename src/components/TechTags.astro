@@ -1,0 +1,67 @@
+---
+// 使用技術のタグ。アイコンがある技術はアイコン + 名前、ない技術は名前だけで表示する。
+// 対応表は profile.ts の techIcons。
+import { techIcons } from '../data/profile';
+import { asset } from '../lib/url';
+
+interface Props {
+  items: string[];
+  /** small: 一覧のカード用 (枠なし・小さめ) */
+  size?: 'normal' | 'small';
+}
+const { items, size = 'normal' } = Astro.props;
+---
+
+<ul class:list={['tech', size]}>
+  {
+    items.map((t) => (
+      <li class="tech-item">
+        {(techIcons[t] ?? []).map((ic) => (
+          <img src={asset(`icons/${ic}.svg`)} alt="" width="20" height="20" />
+        ))}
+        <span>{t}</span>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .tech {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tech-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    line-height: 1.6;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    padding: 4px 10px 4px 6px;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+  }
+  .tech-item img {
+    width: 20px;
+    height: 20px;
+  }
+  /* アイコンがない技術は左の余白をそろえる */
+  .tech-item:not(:has(img)) {
+    padding-left: 10px;
+  }
+
+  .small {
+    gap: 6px 14px;
+  }
+  .small .tech-item {
+    padding: 0;
+    border: none;
+  }
+  .small .tech-item img {
+    width: 18px;
+    height: 18px;
+  }
+</style>

@@ -10,7 +10,6 @@ const nav = [
   { href: `${home}#works`, label: 'Works' },
   { href: `${home}#skills`, label: 'Skills' },
   { href: `${home}#history`, label: 'History' },
-  { href: `${home}#contact`, label: 'Contact' },
 ];
 ---
 
@@ -64,7 +63,10 @@ const nav = [
     top: 0;
     z-index: 10;
     height: var(--header-h);
-    background: var(--white);
+    /* backdrop-filter を付けると、中の全画面メニュー (position: fixed) が
+       ヘッダーの高さに閉じ込められるため、不透明な背景にしている */
+    background: var(--bg);
+    border-bottom: 1px solid var(--line-soft);
   }
   .header-inner {
     height: 100%;
@@ -75,46 +77,45 @@ const nav = [
   }
   .logo {
     font-size: 16px;
-    line-height: 1.4;
+    font-weight: 400;
+    color: var(--fg);
     text-decoration: none;
     white-space: nowrap;
   }
   .nav-pc ul {
     display: flex;
-    gap: 28px;
+    gap: 32px;
     list-style: none;
   }
   .nav-pc a {
     font-size: 12px;
-    font-weight: 700;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
+    color: var(--muted);
     text-decoration: none;
-    line-height: 1;
   }
   .nav-pc a:hover {
-    text-decoration: underline;
+    color: var(--fg);
   }
-
   .menu-btn,
   .menu-close {
     font: inherit;
     font-size: 12px;
-    font-weight: 700;
-    padding: 8px 0 8px 16px;
+    min-height: 44px;
+    padding: 0 0 0 16px;
     background: none;
     border: none;
+    color: var(--fg);
     cursor: pointer;
   }
   .menu-btn {
     display: none;
-    color: var(--black);
   }
   .menu {
     position: fixed;
     inset: 0;
     z-index: 20;
-    background: var(--black);
-    color: var(--white);
+    background: var(--bg);
     padding: 12px var(--gutter);
     display: flex;
     flex-direction: column;
@@ -124,29 +125,24 @@ const nav = [
   }
   .menu-close {
     align-self: flex-end;
-    color: var(--white);
   }
   .menu ul {
     list-style: none;
-    margin-top: 40px;
+    margin-top: 32px;
+    border-top: 1px solid var(--line-soft);
   }
   .menu a {
     display: block;
-    font-size: 28px;
-    font-weight: 700;
+    font-size: 20px;
+    font-weight: 300;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
+    color: var(--fg);
     text-decoration: none;
-    padding: 8px 0;
-    color: var(--white);
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line-soft);
   }
-  .menu a:hover {
-    text-decoration: underline;
-  }
-  .menu :focus-visible {
-    outline-color: var(--white);
-  }
-
-  @media (max-width: 720px) {
+  @media (max-width: 768px) {
     .nav-pc {
       display: none;
     }
