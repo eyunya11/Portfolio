@@ -100,10 +100,30 @@ export const works: Work[] = [
     tech: ['Python', 'Google Colab'],
     // Colab の共有設定は「リンクを知っている全員」にしておく
     links: [{ label: 'Google Colab', url: 'https://colab.research.google.com/drive/1vIcLuIRCimUl6l2JwmR1BPT42bFl2SbV' }],
-    // 【要記入】課題の条件: 画像を4枚以上。public/images/kadai04/ に置いて、ここに足す。
-    // 例: { src: 'images/kadai04/01.png', alt: 'ゲーム設定のフォーム', caption: 'Colab のフォームで設定を変えられる' },
-    // 候補: ゲーム設定のフォーム / 自分の手番の入力 / 役の判定結果 / 最後のランキング
-    images: [],
+    // 課題の条件: 画像を4枚以上。撮影の設定: AI_DIFFICULTY = mixed / RANDOM_SEED = 3
+    // (01・03・04 は DEMO_MODE = True、02 は自分で操作したときの最初の手番)
+    images: [
+      {
+        src: 'images/kadai04/01.png',
+        alt: 'ゲームの設定と参加プレイヤーの一覧',
+        caption: '始めに設定と参加者を表示します。CPU には tight・balanced・aggressive の性格があります。',
+      },
+      {
+        src: 'images/kadai04/02.png',
+        alt: '自分の手番で、手札とコール額を見て行動を選ぶ画面',
+        caption: '自分の手番では、手札とコール額を見て、f・c・r のどれかを入力します。',
+      },
+      {
+        src: 'images/kadai04/03.png',
+        alt: 'ハンド17のショーダウンで、ポットが2つに分かれた結果',
+        caption: 'オールインした CPU-B がメインポットを取り、残りのサイドポットは CPU-C が取りました。',
+      },
+      {
+        src: 'images/kadai04/04.png',
+        alt: 'ゲーム終了時のランキング',
+        caption: '終了時に、チップ数・勝ったハンド数・最高役のランキングを表示します。',
+      },
+    ],
   },
   {
     id: 'festival',

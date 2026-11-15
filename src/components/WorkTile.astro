@@ -1,6 +1,7 @@
 ---
 // 作品一覧のカード。カード全体が作品の詳細ページへのリンク。
-// 読む順: 種類 → 作品名 → 一言説明 → 使用技術 → 時期と足りないもの
+// 読む順: 種類 → 作品名 → 一言説明 → 使用技術 → 時期
+// 「画像なし」「リンク未設定」のような、作る側向けの状態はカードに出さない。
 import type { Work } from '../data/profile';
 import { asset } from '../lib/url';
 import TechTags from './TechTags.astro';
@@ -10,10 +11,6 @@ interface Props {
 }
 const { work } = Astro.props;
 const filled = (s?: string) => typeof s === 'string' && s.trim() !== '';
-
-// 提出前に気づけるよう、URL が空のリンクと画像がないことをカードにも出す
-const missingLinks = work.links.filter((l) => !filled(l.url)).length;
-const noImages = work.images.length === 0;
 ---
 
 <a class="tile" href={asset(`works/${work.id}/`)}>
@@ -27,11 +24,7 @@ const noImages = work.images.length === 0;
       </div>
     )
   }
-  <p class="tile-meta">
-    {filled(work.period) && <span>{work.period}</span>}
-    {noImages && <span>画像なし</span>}
-    {missingLinks > 0 && <span class="warn">リンク未設定({missingLinks}件)</span>}
-  </p>
+  {filled(work.period) && <p class="tile-meta">{work.period}</p>}
 </a>
 
 <style>
@@ -79,18 +72,9 @@ const noImages = work.images.length === 0;
     margin-top: 16px;
   }
   .tile-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px 16px;
     margin-top: auto;
     padding-top: 20px;
     font-size: 13px;
     color: var(--muted);
-  }
-  .tile-meta:empty {
-    display: none;
-  }
-  .warn {
-    color: var(--danger);
   }
 </style>

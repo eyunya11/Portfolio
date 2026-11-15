@@ -203,18 +203,21 @@ const links = work.links.filter((l) => filled(l.label));
   figure {
     margin: 0 0 8px;
   }
+  /* 画像のまわりの余白は、スクリーンショットの VS Code の背景 (#121314) と同じ色にして、
+     余白と画像の境目が見えないようにする */
   .shot {
     display: block;
     width: 100%;
     padding: 0;
     border: none;
-    background: var(--surface);
+    background: #121314;
     cursor: zoom-in;
   }
+  /* 実行結果の文字の画像が多いので、端を切らずに全体を収める */
   .shot img {
     width: 100%;
     aspect-ratio: 16 / 9;
-    object-fit: cover;
+    object-fit: contain;
   }
   .shot:hover img {
     opacity: 0.8;
