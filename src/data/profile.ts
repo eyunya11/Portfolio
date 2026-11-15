@@ -44,7 +44,7 @@ export const links: (Link & { icon: string })[] = [
 // ---------------------------------------------------------------------
 // 作品 (要件2: 課題04 / 要件3: 高専祭プロジェクト)
 //   url を空文字 '' にしておくと、ページ上では「リンク未設定」と表示される。
-//   画像は public/images/<作品id>/01.png のように置き、src を 'images/kadai04/01.png' にする。
+//   画像は public/images/<作品id>/01.webp のように置き、src を 'images/kadai04/01.webp' にする。
 //   ファイル名・フォルダ名に日本語やスペースは使わない。
 // ---------------------------------------------------------------------
 export type Work = {
@@ -104,22 +104,22 @@ export const works: Work[] = [
     // (01・03・04 は DEMO_MODE = True、02 は自分で操作したときの最初の手番)
     images: [
       {
-        src: 'images/kadai04/01.png',
+        src: 'images/kadai04/01.webp',
         alt: 'ゲームの設定と参加プレイヤーの一覧',
         caption: '始めに設定と参加者を表示します。CPU には tight・balanced・aggressive の性格があります。',
       },
       {
-        src: 'images/kadai04/02.png',
+        src: 'images/kadai04/02.webp',
         alt: '自分の手番で、手札とコール額を見て行動を選ぶ画面',
         caption: '自分の手番では、手札とコール額を見て、f・c・r のどれかを入力します。',
       },
       {
-        src: 'images/kadai04/03.png',
+        src: 'images/kadai04/03.webp',
         alt: 'ハンド17のショーダウンで、ポットが2つに分かれた結果',
         caption: 'オールインした CPU-B がメインポットを取り、残りのサイドポットは CPU-C が取りました。',
       },
       {
-        src: 'images/kadai04/04.png',
+        src: 'images/kadai04/04.webp',
         alt: 'ゲーム終了時のランキング',
         caption: '終了時に、チップ数・勝ったハンド数・最高役のランキングを表示します。',
       },
@@ -147,22 +147,22 @@ export const works: Work[] = [
     // 課題の条件: 画像を4枚以上。Unity エディタの Game ビューを撮り、ゲームの画面だけ切り抜いた
     images: [
       {
-        src: 'images/festival/01.png',
+        src: 'images/festival/01.webp',
         alt: 'どの自治体のルールで遊ぶかを選ぶ画面',
         caption: '最初に、どの自治体のルールで遊ぶかを選びます。自治体ごとにゴミ箱の数も違います。',
       },
       {
-        src: 'images/festival/02.png',
+        src: 'images/festival/02.webp',
         alt: 'ベルトで流れるゴミと、上下に並んだゴミ箱',
         caption: 'ベルトで流れてくるゴミを、上下に並んだゴミ箱へドラッグして捨てます。',
       },
       {
-        src: 'images/festival/03.png',
+        src: 'images/festival/03.webp',
         alt: 'ビンのふたをタップして外したところ',
         caption: 'ビンのふたをタップすると外れます。外したふたは、別のゴミとして捨てます。',
       },
       {
-        src: 'images/festival/04.png',
+        src: 'images/festival/04.webp',
         alt: 'ゲーム終了時のリザルト画面',
         caption: '終わると、正解数・最大コンボ・自己ベストとの差と、ランクを表示します。',
       },
